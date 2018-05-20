@@ -1,4 +1,5 @@
 #include <QDBusPendingCall>
+#include <QApplication>
 #include "iconproducer.h"
 #include "appletstrings.h"
 #include "itemcontroller.h"
@@ -44,7 +45,10 @@ void ServiceItemController::update()
     int strength = connmanObject->properties["Strength"].toInt();
 
     item->setData(state == "online" ? name + ' ' + QChar(0x2713) : name, Qt::DisplayRole);
-    item->setData(state == "ready" || state == "online" ? QFont("", -1, QFont::Bold) : QVariant(), Qt::FontRole);
+    //item->setData(state == "ready" || state == "online" ? QFont("", -1, QFont::Bold) : QVariant(), Qt::FontRole);
+    QFont font = qApp->font();
+    font.setBold(true);
+    item->setData(state == "ready" || state == "online" ? font : QVariant(), Qt::FontRole);
 
     if (type == "wifi") {
         item->setData(IconProducer::instance().wireless(strength), Qt::DecorationRole);
